@@ -16,7 +16,7 @@ print("Python: ", sys.version.replace("\n", " "))
 print("OpenCV: ", cv2.__version__)
 
 # initialize the camera and grab a reference to the raw camera capture
-SIZE = (240, 180)
+SIZE = (64, 64)
 camera = PiCamera()
 camera.resolution = SIZE
 camera.framerate = 32
