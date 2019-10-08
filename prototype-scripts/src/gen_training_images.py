@@ -5,7 +5,6 @@ dargestellt.
 """
 
 
-import sys
 import cv2 as cv
 from picamera.array import PiRGBArray
 from picamera import PiCamera
@@ -23,7 +22,7 @@ counter = 0
 
 # start and wait until hand is ready to record
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
-    print("Captured:", counter)
+    print("Captured:", counter, end=' ')
     image = frame.array
 
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
@@ -36,7 +35,8 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
     # image = cv.adaptiveThreshold(image, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 21, 0)
-    cv.imwrite("/tmp/images/image{:04d}.jpg".format(counter), th3)
+    cv.imwrite("/tmp/images/paper/image{:04d}.jpg".format(counter), th3)
+    print("and transformed!")
 
     if counter % 200 == 0:
         images = [image, 0, th1,
