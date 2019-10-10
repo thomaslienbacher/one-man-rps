@@ -38,6 +38,10 @@ model.fit(X, y, batch_size=32, epochs=12, validation_split=0.2, callbacks=[tenso
 model.summary()
 print("Trained model!")
 
-path = os.path.join(DATADIR, "model_64x64.h5")
-model.save(path)
+path = os.path.join(DATADIR, "model_weights.h5")
+model.save_weights(path)
+
+path = os.path.join(DATADIR, "model_architecture.json")
+with open(path, "w") as f:
+    f.write(model.to_json())
 print("Saved model!")
