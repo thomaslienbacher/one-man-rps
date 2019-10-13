@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 # setup
 PRE_CONVERT = False  # wether to apply Otsu filtering to images
-SIZE = (64, 64)
+SIZE = (400, 400)
 camera = PiCamera()
 camera.resolution = SIZE
 camera.framerate = 32
@@ -32,7 +32,7 @@ if not os.path.exists("/tmp/images/scissors"):
 
 # start and wait until hand is ready to record
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
-    print("Captured:", counter, end=' ')
+    print("Captured:", counter)
     image = frame.array
 
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
@@ -44,12 +44,12 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         # Otsu's thresholding after Gaussian filtering
         blur = cv.GaussianBlur(image, (5, 5), 0)
         ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
-        cv.imwrite("/tmp/images/scissors/image{:04d}.jpg".format(counter), th3)
+        print("and transformed!")
+        cv.imwrite("/tmp/images/paper/image{:04d}.jpg".format(counter), th3)
     else:
-        cv.imwrite("/tmp/images/scissors/image{:04d}.jpg".format(counter), image)
-    print("and transformed!")
+        cv.imwrite("/tmp/images/paper/image{:04d}.jpg".format(counter), image)
 
-    if counter % 200 == 0:
+    if counter % 250 == 0:
         if PRE_CONVERT:
             images = [image, 0, th1,
                       image, 0, th2,

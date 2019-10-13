@@ -9,7 +9,7 @@ import pickle
 import os
 
 DATADIR = "E:/Thomas/one-man-rps/data"
-SIZE = (64, 64)
+SIZE = (140, 140)
 
 path = os.path.join(DATADIR, "X.pickle")
 pickle_in = open(path, "rb")
@@ -37,7 +37,7 @@ model.compile(loss='sparse_categorical_crossentropy',
 
 path = os.path.join(DATADIR, "logs")
 tensorboard = keras.callbacks.TensorBoard(log_dir=path)
-model.fit(X, y, batch_size=200, epochs=6, validation_split=0.05, callbacks=[tensorboard])
+model.fit(X, y, batch_size=150, epochs=6, validation_split=0.05, callbacks=[tensorboard])
 model.summary()
 print("Trained model!")
 

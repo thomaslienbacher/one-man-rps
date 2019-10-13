@@ -13,7 +13,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 
 DATADIR = "/tmp"
-SIZE = (64, 64)
+SIZE = (140, 140)
 
 camera = PiCamera()
 camera.resolution = SIZE
@@ -30,7 +30,7 @@ model.load_weights(path)
 print("Loaded model!")
 
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
-    print("Captured .. ", end='')
+    # print("Captured .. ", end='')
     image = frame.array
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
 
@@ -38,13 +38,24 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
 
     prediction = model.predict([input])
 
-    print("predicted")
+    # print("predicted")
 
     # plt.imshow(image, cmap="gray")
     # plt.show()
 
-    print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
-                                        int(prediction[0][1] * 100),
-                                        int(prediction[0][2] * 100)))
-    # print("{}".format(prediction))
+    # print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
+    #                                    int(prediction[0][1] * 100),
+    #                                    int(prediction[0][2] * 100)))
+
+    THRESHOLD = 0.7
+    prediction = prediction[0]
+    if prediction[0] > THRESHOLD:
+        print("ROCK")
+    if prediction[1] > THRESHOLD:
+        print("PAPER")
+    if prediction[2] > THRESHOLD:
+        print("SCISSORS")
+    if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD:
+        print("__NONE__")
+
     rawCapture.truncate(0)
