@@ -34,15 +34,17 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     image = frame.array
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
 
-    input = image.reshape(1, SIZE[0], SIZE[1])
-    input = input / 255.0
+    input = image.reshape(1, SIZE[0], SIZE[1], 1)
 
     prediction = model.predict([input])
 
     print("predicted")
 
-    plt.imshow(image, cmap="gray")
-    plt.show()
+    # plt.imshow(image, cmap="gray")
+    # plt.show()
 
-    print("{:02f} {:02f} {:02f}".format(prediction[0][0], prediction[0][1], prediction[0][2]))
+    print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
+                                        int(prediction[0][1] * 100),
+                                        int(prediction[0][2] * 100)))
+    # print("{}".format(prediction))
     rawCapture.truncate(0)

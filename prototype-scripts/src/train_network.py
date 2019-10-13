@@ -3,7 +3,7 @@ Dieses Script nimmt trainiert ein Neural Netzwerk, mit den Daten die vorher
 aufbereitet wurden.
 """
 
-import tensorflow as tf
+
 from tensorflow import keras
 import pickle
 import os
@@ -19,22 +19,25 @@ path = os.path.join(DATADIR, "y.pickle")
 pickle_in = open(path, "rb")
 y = pickle.load(pickle_in)
 
-X = X / 255.0
-
 model = keras.Sequential([
-    keras.layers.Flatten(input_shape=SIZE),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(24, activation=tf.nn.relu),
-    keras.layers.Dense(3, activation=tf.nn.softmax)
+    keras.layers.Conv2D(32, (5, 5), activation='relu', input_shape=(SIZE[0], SIZE[1], 1)),
+    keras.layers.MaxPooling2D((3, 3)),
+    keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D((2, 2)),
+    keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D((2, 2)),
+    keras.layers.Flatten(),
+    keras.layers.Dense(64, activation='relu'),
+    keras.layers.Dense(3, activation='softmax')
 ])
 
-model.compile(loss='binary_crossentropy',
+model.compile(loss='sparse_categorical_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
 path = os.path.join(DATADIR, "logs")
 tensorboard = keras.callbacks.TensorBoard(log_dir=path)
-model.fit(X, y, batch_size=32, epochs=12, validation_split=0.2, callbacks=[tensorboard])
+model.fit(X, y, batch_size=200, epochs=6, validation_split=0.05, callbacks=[tensorboard])
 model.summary()
 print("Trained model!")
 

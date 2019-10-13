@@ -28,9 +28,9 @@ for category in CATEGORIES:
     for file in tqdm(iterable=os.listdir(path), file=sys.stdout):
         img = cv2.imread(os.path.join(path, file), cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, SIZE)
-        output = [0, 0, 0]
-        output[CATEGORIES.index(category)] = 1
-        dataset.append([img, output])
+        # output = [0, 0, 0]
+        # output[CATEGORIES.index(category)] = 1
+        dataset.append([img.reshape(SIZE[0], SIZE[1], 1), CATEGORIES.index(category)])
         # plt.imshow(img, cmap='gray')
         # plt.show()
 
