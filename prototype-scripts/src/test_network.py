@@ -32,24 +32,17 @@ print("Loaded model!")
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
     print("Captured .. ", end='')
     image = frame.array
-
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
-    ret1, th1 = cv.threshold(image, 127, 255, cv.THRESH_BINARY)
-    ret2, th2 = cv.threshold(image, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
-    blur = cv.GaussianBlur(image, (5, 5), 0)
-    ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
-    print("transformed .. ", end='')
-
-    plt.imshow(th3, cmap="gray")
-    plt.show()
-
-    input = th3.reshape(1, SIZE[0], SIZE[1])
+    input = image.reshape(1, SIZE[0], SIZE[1])
     input = input / 255.0
 
     prediction = model.predict([input])
 
     print("predicted")
+
+    plt.imshow(image, cmap="gray")
+    plt.show()
 
     print("{:02f} {:02f} {:02f}".format(prediction[0][0], prediction[0][1], prediction[0][2]))
     rawCapture.truncate(0)
