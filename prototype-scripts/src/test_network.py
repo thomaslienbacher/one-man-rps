@@ -12,7 +12,7 @@ import time
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-DATADIR = "/tmp"
+DATADIR = "/home/pi"
 SIZE = (140, 140)
 
 camera = PiCamera()
@@ -47,14 +47,14 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     #                                    int(prediction[0][1] * 100),
     #                                    int(prediction[0][2] * 100)))
 
-    THRESHOLD = 0.7
+    THRESHOLD = 0.6
     prediction = prediction[0]
     if prediction[0] > THRESHOLD:
-        print("ROCK")
+        print("ROCK", int(prediction[0] * 100))
     if prediction[1] > THRESHOLD:
-        print("PAPER")
+        print("PAPER", int(prediction[1] * 100))
     if prediction[2] > THRESHOLD:
-        print("SCISSORS")
+        print("SCISSORS", int(prediction[2] * 100))
     if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD:
         print("__NONE__")
 
