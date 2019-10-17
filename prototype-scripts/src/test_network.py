@@ -47,7 +47,7 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     #                                    int(prediction[0][1] * 100),
     #                                    int(prediction[0][2] * 100)))
 
-    THRESHOLD = 0.6
+    THRESHOLD = 0.7
     prediction = prediction[0]
     if prediction[0] > THRESHOLD:
         print("ROCK", int(prediction[0] * 100))
@@ -55,7 +55,9 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         print("PAPER", int(prediction[1] * 100))
     if prediction[2] > THRESHOLD:
         print("SCISSORS", int(prediction[2] * 100))
-    if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD:
-        print("__NONE__")
+    if prediction[3] > THRESHOLD:
+        print("EMPTY", int(prediction[3] * 100))
+    if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD and prediction[3] < THRESHOLD:
+        print("__UNDEFINED__")
 
     rawCapture.truncate(0)

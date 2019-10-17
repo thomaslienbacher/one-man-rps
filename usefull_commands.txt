@@ -1,0 +1,7 @@
+# List of usefull linux commands
+
+# Create archive of folder
+tar cfzv images.tar.gz images
+
+# Create video out of single images
+ffmpeg -f image2 -pattern_type glob -framerate 32 -i 'image*.jpg' scissors.avi

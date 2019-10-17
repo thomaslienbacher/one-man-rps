@@ -28,7 +28,7 @@ model = keras.Sequential([
     keras.layers.MaxPooling2D((2, 2)),
     keras.layers.Flatten(),
     keras.layers.Dense(64, activation='relu'),
-    keras.layers.Dense(3, activation='softmax')
+    keras.layers.Dense(4, activation='softmax')
 ])
 
 model.compile(loss='sparse_categorical_crossentropy',

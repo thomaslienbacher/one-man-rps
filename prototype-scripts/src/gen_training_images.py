@@ -30,6 +30,9 @@ if not os.path.exists("/tmp/images/paper"):
 if not os.path.exists("/tmp/images/scissors"):
     os.makedirs("/tmp/images/scissors")
 
+if not os.path.exists("/tmp/images/empty"):
+    os.makedirs("/tmp/images/empty")
+
 # start and wait until hand is ready to record
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
     print("Captured:", counter)
@@ -45,9 +48,9 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         blur = cv.GaussianBlur(image, (5, 5), 0)
         ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
         print("and transformed!")
-        cv.imwrite("/tmp/images/paper/image{:04d}.jpg".format(counter), th3)
+        cv.imwrite("/tmp/images/empty/image{:04d}.jpg".format(counter), th3)
     else:
-        cv.imwrite("/tmp/images/paper/image{:04d}.jpg".format(counter), image)
+        cv.imwrite("/tmp/images/empty/image{:04d}.jpg".format(counter), image)
 
     if counter % 250 == 0:
         if PRE_CONVERT:

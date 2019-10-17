@@ -14,7 +14,7 @@ import sys
 import matplotlib.pyplot as plt
 
 DATADIR = "E:/Thomas/one-man-rps/data"
-CATEGORIES = ["rock", "paper", "scissors"]
+CATEGORIES = ["rock", "paper", "scissors", "empty"]
 SIZE = (140, 140)
 
 dataset = []
