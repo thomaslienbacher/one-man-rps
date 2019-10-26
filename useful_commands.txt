@@ -5,3 +5,6 @@ tar cfzv images.tar.gz images
 
 # Create video out of single images
 ffmpeg -f image2 -pattern_type glob -framerate 32 -i 'image*.jpg' scissors.avi
+
+# Stream video from camera over network
+raspivid -t 9999999 -n -w 1280 -h 720 -fps 30 -o - | nc -l 7799
