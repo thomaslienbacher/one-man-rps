@@ -8,12 +8,13 @@
 
 #include <libssh/libsshpp.hpp>
 
-int stream_camera() {
+int stream_camera(const std::string &host) {
     cv::VideoCapture cv;
 
-    auto conn = "tcp://raspberrypi:7799";
+    auto conn = "tcp://" + host + ":7799";
 
     if (cv.open(conn)) {//$ raspivid -t 9999999 -n -w 1280 -h 720 -fps 30 -ex fixedfps -b 3000000 -vf -o - | nc -l 7799
+        std::cout << "Press q to quit" << std::endl;
         cv::Mat mat;
         while (true) {
             cv >> mat;
@@ -21,7 +22,7 @@ int stream_camera() {
             if ((cv::waitKey(10) & 0xff) == 'q') break;
         }
     } else {
-        std::cerr << "Can not open video source!";
+        std::cerr << "Can't open video source!";
         return 1;
     }
 
@@ -39,10 +40,10 @@ void print_usage() {
            "    videostreaming <HOST> <PORT> <USERNAME> <PASSWORD>\n"
            "\n"
            "PARAMETERS:\n"
-           "    HOST          \n"
-           "    PORT          \n"
-           "    USERNAME      \n"
-           "    PASSWORD      \n"
+           "    HOST           IP or hostname of the pi\n"
+           "    PORT           SSH port of the pi\n"
+           "    USERNAME       Username to authenticate\n"
+           "    PASSWORD       Password used to authenticate\n"
            "\n");
 }
 
@@ -85,19 +86,36 @@ int main(int argc, char *argv[]) {
     if (result != SSH_OK) {
         std::cerr << "Error connecting: [" << session.getErrorCode() << "] " << session.getError() << std::endl;
         return 1;
+    } else {
+        std::cout << "Connected to " << host << ":" << std::to_string(port) << std::endl;
     }
 
-    channel.requestExec("raspivid -t 9999999 -n -w 1280 -h 720 -fps 30 -o - | nc -l 7799");
+    result = channel.requestPty("xterm", 80, 80);
+    if (result != SSH_OK) {
+        std::cerr << "Error requesting pty: [" << session.getErrorCode() << "] " << session.getError() << std::endl;
+        return 1;
+    }
+
+    result = channel.requestShell();
+    if (result != SSH_OK) {
+        std::cerr << "Error requesting shell: [" << session.getErrorCode() << "] " << session.getError() << std::endl;
+        return 1;
+    }
+
+    std::string cmd = "raspivid -t 999999 -n -w 1280 -h 720 -fps 30 -o - | nc -l 7799\n";
+    std::cout << "Executing: " << cmd << std::endl;
+    result = channel.write(cmd.c_str(), cmd.length());
+    if (result != cmd.length()) {
+        std::cerr << "Error writing!" << std::endl;
+        return 1;
+    }
+
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    /*int read = 0;
-    do {
-        std::array<char, 128> buffer{};
-        read = channel.read(buffer.data(), buffer.size(), 1);
-        std::string str(buffer.data(), read);
-        std::cout << str;
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    } while (read);*/
+    result = stream_camera(host);
 
-    return stream_camera();
+    channel.close();
+    session.disconnect();
+
+    return result;
 }
