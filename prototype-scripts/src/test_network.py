@@ -12,6 +12,7 @@ import time
 import cv2 as cv
 import matplotlib.pyplot as plt
 from utils import *
+import numpy as np
 
 DATADIR = "/home/pi"
 
@@ -33,7 +34,6 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     # print("Captured .. ", end='')
     image = frame.array
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY) / 255
-    print(image)
 
     input = image.reshape(1, IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1)
 
@@ -41,24 +41,32 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
 
     # print("predicted")
 
-    plt.imshow(input[0].reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
-    plt.show()
+    # plt.imshow(input[0].reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
+    # plt.show()
 
     # print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
     #                                    int(prediction[0][1] * 100),
     #                                    int(prediction[0][2] * 100)))
 
-    THRESHOLD = 0.8
+    print("-", end="\t")
+
+    THRESHOLD = 0.6
     prediction = prediction[0]
-    if prediction[0] > THRESHOLD:
-        print("ROCK", int(prediction[0] * 100))
-    if prediction[1] > THRESHOLD:
-        print("PAPER", int(prediction[1] * 100))
-    if prediction[2] > THRESHOLD:
-        print("SCISSORS", int(prediction[2] * 100))
-    if prediction[3] > THRESHOLD:
-        print("EMPTY", int(prediction[3] * 100))
+
+    print(int(prediction[0] * 100),
+          int(prediction[1] * 100),
+          int(prediction[2] * 100),
+          int(prediction[3] * 100), end="\t")
+
     if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD and prediction[3] < THRESHOLD:
-        print("__UNDEFINED__")
+        print("--")
+    else:
+        CATEGORIES = ["ROCK", "PAPER", "SCISSORS", "EMPTY"]
+        out = np.argmax(prediction)
+
+        if isinstance(out, list):
+            print(CATEGORIES[out[0]])
+        else:
+            print(CATEGORIES[out])
 
     rawCapture.truncate(0)
