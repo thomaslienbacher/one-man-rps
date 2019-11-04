@@ -19,7 +19,7 @@ camera.resolution = SIZE
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=SIZE)
 time.sleep(0.5)
-counter = 0
+counter = 10000
 
 if not os.path.exists("/tmp/images/rock"):
     os.makedirs("/tmp/images/rock")
@@ -48,11 +48,11 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         blur = cv.GaussianBlur(image, (5, 5), 0)
         ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
         print("and transformed!")
-        cv.imwrite("/tmp/images/empty/image{:04d}.jpg".format(counter), th3)
+        cv.imwrite("/tmp/images/scissors/image{:04d}.jpg".format(counter), th3)
     else:
-        cv.imwrite("/tmp/images/empty/image{:04d}.jpg".format(counter), image)
+        cv.imwrite("/tmp/images/scissors/image{:04d}.jpg".format(counter), image)
 
-    if counter % 250 == 0:
+    if counter % 100 == 0:
         if PRE_CONVERT:
             images = [image, 0, th1,
                       image, 0, th2,
@@ -69,7 +69,7 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
                 plt.subplot(3, 3, i * 3 + 3), plt.imshow(images[i * 3 + 2], "gray")
                 plt.title(titles[i * 3 + 2]), plt.xticks([]), plt.yticks([])
         else:
-            plt.imshow(image, cmap="gray")
+            plt.imshow(cv.resize(image, (100, 100)), cmap="gray")
 
         plt.show()
 

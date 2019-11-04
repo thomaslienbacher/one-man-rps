@@ -12,10 +12,10 @@ import random
 import pickle
 import sys
 import matplotlib.pyplot as plt
+from utils import IMG_NET_SIZE
 
 DATADIR = "E:/Thomas/one-man-rps/data"
 CATEGORIES = ["rock", "paper", "scissors", "empty"]
-SIZE = (140, 140)
 
 dataset = []
 
@@ -27,10 +27,11 @@ for category in CATEGORIES:
     path = os.path.join(DATADIR, "images", category)
     for file in tqdm(iterable=os.listdir(path), file=sys.stdout):
         img = cv2.imread(os.path.join(path, file), cv2.IMREAD_GRAYSCALE)
-        img = cv2.resize(img, SIZE)
-        # output = [0, 0, 0]
-        # output[CATEGORIES.index(category)] = 1
-        dataset.append([img.reshape(SIZE[0], SIZE[1], 1), CATEGORIES.index(category)])
+        img = cv2.resize(img, IMG_NET_SIZE) / 255
+        img2 = cv2.flip(img, 1)
+
+        dataset.append([img.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1), CATEGORIES.index(category)])
+        dataset.append([img2.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1), CATEGORIES.index(category)])
         # plt.imshow(img, cmap='gray')
         # plt.show()
 

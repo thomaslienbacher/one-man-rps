@@ -11,14 +11,14 @@ from picamera import PiCamera
 import time
 import cv2 as cv
 import matplotlib.pyplot as plt
+from utils import *
 
 DATADIR = "/home/pi"
-SIZE = (140, 140)
 
 camera = PiCamera()
-camera.resolution = SIZE
+camera.resolution = IMG_NET_SIZE
 camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=SIZE)
+rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
 time.sleep(0.5)
 counter = 0
 
@@ -32,22 +32,23 @@ print("Loaded model!")
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
     # print("Captured .. ", end='')
     image = frame.array
-    image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
+    image = cv.cvtColor(image, cv.COLOR_RGB2GRAY) / 255
+    print(image)
 
-    input = image.reshape(1, SIZE[0], SIZE[1], 1)
+    input = image.reshape(1, IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1)
 
     prediction = model.predict([input])
 
     # print("predicted")
 
-    # plt.imshow(image, cmap="gray")
-    # plt.show()
+    plt.imshow(input[0].reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
+    plt.show()
 
     # print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
     #                                    int(prediction[0][1] * 100),
     #                                    int(prediction[0][2] * 100)))
 
-    THRESHOLD = 0.7
+    THRESHOLD = 0.8
     prediction = prediction[0]
     if prediction[0] > THRESHOLD:
         print("ROCK", int(prediction[0] * 100))
