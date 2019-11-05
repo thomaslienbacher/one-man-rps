@@ -23,7 +23,7 @@ model = create_model()
 
 path = os.path.join(DATADIR, "logs")
 tensorboard = keras.callbacks.TensorBoard(log_dir=path, histogram_freq=0)
-model.fit(X, y, batch_size=60, epochs=2, validation_split=0.2, callbacks=[tensorboard])
+model.fit(X, y, batch_size=200, epochs=4, validation_split=0.5, callbacks=[tensorboard])
 model.summary()
 print("Trained model!")
 

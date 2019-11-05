@@ -24,14 +24,14 @@ print("Working in: ", DATADIR)
 for category in CATEGORIES:
     print("Loading images for", category)
 
-    path = os.path.join(DATADIR, "images", category)
+    path = os.path.join(DATADIR, "images/all", category)
     for file in tqdm(iterable=os.listdir(path), file=sys.stdout):
         img = cv2.imread(os.path.join(path, file), cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, IMG_NET_SIZE) / 255
-        img2 = cv2.flip(img, 1)
+        # img2 = cv2.flip(img, 1)
 
         dataset.append([img.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1), CATEGORIES.index(category)])
-        dataset.append([img2.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1), CATEGORIES.index(category)])
+        # dataset.append([img2.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1), CATEGORIES.index(category)])
         # plt.imshow(img, cmap='gray')
         # plt.show()
 

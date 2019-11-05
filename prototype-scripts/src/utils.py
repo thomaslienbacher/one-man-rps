@@ -1,7 +1,7 @@
 import os
 from tensorflow import keras
 
-IMG_NET_SIZE = (128, 128)
+IMG_NET_SIZE = (96, 96)
 
 
 def save_model(directory, model):
@@ -20,12 +20,12 @@ def create_model():
         keras.layers.MaxPooling2D((3, 3)),
         keras.layers.Conv2D(64, (5, 5), activation='relu'),
         keras.layers.MaxPooling2D((2, 2)),
-        keras.layers.Conv2D(64, (5, 5), activation='relu'),
-        keras.layers.MaxPooling2D((2, 2)),
+        # keras.layers.Conv2D(64, (5, 5), activation='relu'),
+        # keras.layers.MaxPooling2D((2, 2)),
         keras.layers.Flatten(),
-        keras.layers.Dense(156, activation='relu'),
-        keras.layers.Dropout(0.3),
-        keras.layers.Dense(24, activation='relu'),
+        keras.layers.Dropout(0.4),
+        keras.layers.Dense(72, activation='relu'),
+        keras.layers.Dropout(0.1),
         keras.layers.Dense(4, activation='softmax')
     ])
 

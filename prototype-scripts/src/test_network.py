@@ -21,7 +21,6 @@ camera.resolution = IMG_NET_SIZE
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
 time.sleep(0.5)
-counter = 0
 
 path = os.path.join(DATADIR, "model_architecture.json")
 with open(path, "r") as f:

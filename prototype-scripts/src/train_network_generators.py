@@ -5,63 +5,94 @@ die zusätzlich vorbereitete und erweiter werden.
 
 from tensorflow import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import pickle
 import os
 from utils import *
+import numpy as np
+import pathlib
+import matplotlib.pyplot as plt
 
 DATADIR = "E:/Thomas/one-man-rps/data"
 
-path = os.path.join(DATADIR, "images")
+path = os.path.join(DATADIR, "images/train")
+path = pathlib.Path(path)
+image_count = len(list(path.glob('*/*.jpg')))
+
+BATCH_SIZE = 80
+STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
+CLASS_NAMES = np.array([item.name for item in path.glob('*')])
+EPOCHS = 10
+
+print("Working in: ", DATADIR)
+
+print(image_count)
+print(BATCH_SIZE)
+print(STEPS_PER_EPOCH)
+print(CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
-    rotation_range=10,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    shear_range=0.1,
+    rescale=1. / 255,
+    rotation_range=15,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True
 )
 
-valid_datagen = ImageDataGenerator()
+valid_datagen = ImageDataGenerator(
+    rescale=1. / 255,
+)
 
+path = os.path.join(DATADIR, "images/train")
 train_generator = train_datagen.flow_from_directory(
     directory=path,
     target_size=IMG_NET_SIZE,
     color_mode="grayscale",
-    batch_size=150,
+    batch_size=BATCH_SIZE,
     class_mode="sparse",
     shuffle=True,
-    seed=42
 )
 
+path = os.path.join(DATADIR, "images/valid")
 valid_generator = valid_datagen.flow_from_directory(
     directory=path,
     target_size=IMG_NET_SIZE,
     color_mode="grayscale",
-    batch_size=50,
+    batch_size=BATCH_SIZE,
     class_mode="sparse",
     shuffle=True,
-    seed=100
 )
 
 model = create_model()
 
-path = os.path.join(DATADIR, "logs")
-tensorboard = keras.callbacks.TensorBoard(log_dir=path)
-STEP_SIZE_TRAIN = train_generator.n // train_generator.batch_size
-STEP_SIZE_VALID = valid_generator.n // valid_generator.batch_size
+history = model.fit_generator(generator=train_generator,
+                              steps_per_epoch=STEPS_PER_EPOCH,
+                              validation_data=valid_generator,
+                              validation_steps=STEPS_PER_EPOCH,
+                              epochs=EPOCHS)
 
-print("STEP_SIZE_TRAIN", STEP_SIZE_TRAIN, train_generator.n, train_generator.batch_size)
-print("STEP_SIZE_VALID", STEP_SIZE_VALID, valid_generator.n, valid_generator.batch_size)
-
-model.fit_generator(generator=train_generator,
-                    steps_per_epoch=STEP_SIZE_TRAIN,
-                    validation_data=valid_generator,
-                    validation_steps=STEP_SIZE_VALID,
-                    epochs=2,
-                    callbacks=[tensorboard])
-
-model.summary()
 print("Trained model!")
 
-save_model(DATADIR, model)
+model.summary()
+
+acc = history.history["acc"]
+val_acc = history.history["val_acc"]
+
+loss = history.history["loss"]
+val_loss = history.history["val_loss"]
+
+epochs_range = range(EPOCHS)
+
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, acc, label="Training Accuracy")
+plt.plot(epochs_range, val_acc, label="Validation Accuracy")
+plt.legend(loc="lower right")
+plt.title("Training and Validation Accuracy")
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, loss, label="Training Loss")
+plt.plot(epochs_range, val_loss, label="Validation Loss")
+plt.legend(loc="upper right")
+plt.title("Training and Validation Loss")
+plt.show()
