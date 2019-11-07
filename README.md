@@ -9,34 +9,45 @@ Using a Raspberry Pi and a Pi Camera you can play rock paper scissors againt a c
 
 ## How to setup Raspberry Pi
 
-You will need to install various Python 3 packages and compile OpenCV.
+#### 1. Update and upgrade
 
-#### 1. Compiling and installing OpenCV
+1. `$ sudo apt update`
+2. `$ sudo apt upgrade`
 
-Follow this tutorial [Install OpenCV 4 on your Raspberry Pi](https://www.pyimagesearch.com/2018/09/26/install-opencv-4-on-your-raspberry-pi/) **BUT** use OpenCV version **4.0.1**!
+#### 2. Install dependencies
 
-##### Remarks:
+First install apt packages:
 
-* Don't use a virtual Python environment, instead install it globaly
-* In the later stages of compiling stop the process and restart with only one thread  `-j1`
+* libqtgui4
+* libqt4-test
 
+`$ sudo apt install libqtgui4 libqt4-test`
 
-#### 2. Python 3 packages
+Then install Python 3 packages:
 
+* opencv-contrib-python
 * numpy
 * matplotlib
 * picamera
 * tensorflow
 
-`$ pip3 install numpy matplotlib "picamera[array]" tensorflow `
+`$ pip3 install numpy matplotlib opencv-contrib-python "picamera[array]" tensorflow `
 
 #### 3. Enable Camera
+
 1. `$ sudo raspi-config`
 2. Interfacing options
 3. Camera
 4. Enable
 
 #### 4. Clone this repository
+
 `$ git clone git@github.com:thomaslienbacher/one-man-rps.git`
+or
 `$ git clone https://github.com/thomaslienbacher/one-man-rps.git`
 
+#### 5. Basic test
+
+Run a Python file to test if the main dependecies can be imported.
+
+`$ python3 one-man-rps/prototype-scripts/src/check_dependencies.py`
