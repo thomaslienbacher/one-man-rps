@@ -25,13 +25,13 @@ First install apt packages:
 
 Then install Python 3 packages:
 
-* opencv-contrib-python
+* opencv-contrib-python (4.0.1.24)
 * numpy
 * matplotlib
 * picamera
 * tensorflow
 
-`$ pip3 install numpy matplotlib opencv-contrib-python "picamera[array]" tensorflow `
+`$ pip3 install numpy matplotlib opencv-contrib-python==4.0.1.24 "picamera[array]" tensorflow `
 
 #### 3. Enable Camera
 
@@ -43,7 +43,9 @@ Then install Python 3 packages:
 #### 4. Clone this repository
 
 `$ git clone git@github.com:thomaslienbacher/one-man-rps.git`
+
 or
+
 `$ git clone https://github.com/thomaslienbacher/one-man-rps.git`
 
 #### 5. Basic test
