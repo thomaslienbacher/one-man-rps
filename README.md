@@ -20,8 +20,11 @@ First install apt packages:
 
 * libqtgui4
 * libqt4-test
+* libhdf5-dev
+* libjasper-dev
+* libatlas-base-dev
 
-`$ sudo apt install libqtgui4 libqt4-test`
+`$ sudo apt install libqtgui4 libqt4-test libhdf5-dev libjasper-dev libatlas-base-dev`
 
 Then install Python 3 packages:
 
