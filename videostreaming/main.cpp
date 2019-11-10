@@ -9,12 +9,16 @@
 
 #include <libssh/libsshpp.hpp>
 
+// #define CAPTURE_ENABLE
+
 int stream_camera(const std::string &host) {
     cv::VideoCapture cv;
 
     auto conn = "tcp://" + host + ":7799";
+#ifdef CAPTURE_ENABLE
     std::filesystem::path datapath = R"(E:\Thomas\one-man-rps\data\images\videostreaming\scissors)";
-    int counter = 5000;
+    int counter = 10000;
+#endif
 
     if (cv.open(conn)) {//$ raspivid -t 9999999 -n -w 1280 -h 720 -fps 30 -ex fixedfps -b 3000000 -vf -o - | nc -l 7799
         std::cout << "Press q to quit" << std::endl;
@@ -22,13 +26,16 @@ int stream_camera(const std::string &host) {
         while (true) {
             cv >> mat;
             cv::imshow(conn, mat);
+#ifdef CAPTURE_ENABLE
             std::cout << counter << "\n";
             cv::imwrite((datapath / ("scissors_" + std::to_string(counter) + ".png")).generic_u8string(), mat);
-            counter++;
 
-            if (counter == 10000) {
+            if (counter == 20000) {
                 std::exit(0);
             }
+
+            counter++;
+#endif
 
             if ((cv::waitKey(10) & 0xff) == 'q') break;
         }
@@ -46,6 +53,9 @@ void print_usage() {
            ")\n"
            "Author: Thomas Lienbacher <lienbacher.tom@gmail.com>\n"
            "Displays the video stream from a Raspberry Pi Camera\n"
+           #ifdef CAPTURE_ENABLE
+           "and captures the images (compiled with CAPTURE_ENABLE)\n"
+           #endif
            "\n"
            "USAGE:\n"
            "    videostreaming <HOST> <PORT> <USERNAME> [PASSWORD]\n"
@@ -125,7 +135,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::string cmd = "raspivid -t 999999 -n -w 400 -h 400 -fps 25 -o - | nc -l 7799\n";
+    std::string cmd = "raspivid -t 999999 -n -w 1280 -h 720 -fps 25 -o - | nc -l 7799\n";
     std::cout << "Executing: " << cmd << std::endl;
     result = channel.write(cmd.c_str(), cmd.length());
     if (result != cmd.length()) {
