@@ -34,8 +34,8 @@ print("Loaded model!")
 # Window created with tkinter
 window = tkinter.Tk()
 # Loading pic with cv
-# cv2.COLOR_BGR2RGB declares the correct color format
-cv_img = cv2.cvtColor(cv2.imread("blank.png"), cv2.COLOR_BGR2RGB)
+# cv.COLOR_BGR2RGB declares the correct color format
+cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
 # Creating canvas with correct scaling
 height, width, no_channels = cv_img.shape
 canvas = tkinter.Canvas(window, width = width, height = height)
@@ -84,23 +84,23 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
             print(CATEGORIES[out])
             highest = out
 
-    if prediction[0] > THRESHOLD:
-        cv_img = cv2.cvtColor(cv2.imread("blank.png"), cv2.COLOR_BGR2RGB)
+    if highest == 0:
+        cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
-    if prediction[1] > THRESHOLD:
-        cv_img = cv2.cvtColor(cv2.imread("paper.png"), cv2.COLOR_BGR2RGB)
+    if highest == 1:
+        cv_img = cv.cvtColor(cv.imread("scissors.png"), cv.COLOR_BGR2RGB)
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
-    if prediction[2] > THRESHOLD:
-        cv_img = cv2.cvtColor(cv2.imread("rock.png"), cv2.COLOR_BGR2RGB)
+    if highest == 2:
+        cv_img = cv.cvtColor(cv.imread("paper.png"), cv.COLOR_BGR2RGB)
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
-    if prediction[3] > THRESHOLD:
-        cv_img = cv2.cvtColor(cv2.imread("scissors.png"), cv2.COLOR_BGR2RGB)
+    if highest == 3:
+        cv_img = cv.cvtColor(cv.imread("rock.png"), cv.COLOR_BGR2RGB)
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
