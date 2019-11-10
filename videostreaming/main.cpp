@@ -2,6 +2,7 @@
 #include <thread>
 #include <chrono>
 #include <array>
+#include <filesystem>
 #include <opencv2/opencv.hpp>
 
 #define SSH_NO_CPP_EXCEPTIONS
@@ -12,6 +13,8 @@ int stream_camera(const std::string &host) {
     cv::VideoCapture cv;
 
     auto conn = "tcp://" + host + ":7799";
+    std::filesystem::path datapath = R"(E:\Thomas\one-man-rps\data\images\videostreaming\scissors)";
+    int counter = 5000;
 
     if (cv.open(conn)) {//$ raspivid -t 9999999 -n -w 1280 -h 720 -fps 30 -ex fixedfps -b 3000000 -vf -o - | nc -l 7799
         std::cout << "Press q to quit" << std::endl;
@@ -19,6 +22,14 @@ int stream_camera(const std::string &host) {
         while (true) {
             cv >> mat;
             cv::imshow(conn, mat);
+            std::cout << counter << "\n";
+            cv::imwrite((datapath / ("scissors_" + std::to_string(counter) + ".png")).generic_u8string(), mat);
+            counter++;
+
+            if (counter == 10000) {
+                std::exit(0);
+            }
+
             if ((cv::waitKey(10) & 0xff) == 'q') break;
         }
     } else {
@@ -37,18 +48,19 @@ void print_usage() {
            "Displays the video stream from a Raspberry Pi Camera\n"
            "\n"
            "USAGE:\n"
-           "    videostreaming <HOST> <PORT> <USERNAME> <PASSWORD>\n"
+           "    videostreaming <HOST> <PORT> <USERNAME> [PASSWORD]\n"
            "\n"
            "PARAMETERS:\n"
-           "    HOST           IP or hostname of the pi\n"
-           "    PORT           SSH port of the pi\n"
-           "    USERNAME       Username to authenticate\n"
-           "    PASSWORD       Password used to authenticate\n"
+           "    HOST         IP or hostname of the pi\n"
+           "    PORT         SSH port of the pi\n"
+           "    USERNAME     Username to authenticate\n"
+           "    PASSWORD     Password used to authenticate\n"
+           "                 or via environment variable VS_PASSWORD"
            "\n");
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 5) {
+    if (argc < 4) {
         print_usage();
         return 1;
     }
@@ -56,7 +68,18 @@ int main(int argc, char *argv[]) {
     std::string host(argv[1]);
     int port = std::strtol(argv[2], nullptr, 10);
     std::string username(argv[3]);
-    std::string password(argv[4]);
+    std::string password;
+
+    if (char *passenv = getenv("VS_PASSWORD")) {
+        password = std::string(passenv);
+    } else {
+        if (argc >= 5) {
+            password = std::string(argv[4]);
+        } else {
+            print_usage();
+            return 1;
+        }
+    }
 
     ssh::Session session;
     session.setOption(SSH_OPTIONS_HOST, host.c_str());
@@ -102,7 +125,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::string cmd = "raspivid -t 999999 -n -w 1280 -h 720 -fps 30 -o - | nc -l 7799\n";
+    std::string cmd = "raspivid -t 999999 -n -w 400 -h 400 -fps 25 -o - | nc -l 7799\n";
     std::cout << "Executing: " << cmd << std::endl;
     result = channel.write(cmd.c_str(), cmd.length());
     if (result != cmd.length()) {

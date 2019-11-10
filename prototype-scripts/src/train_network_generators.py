@@ -3,7 +3,6 @@ Dieses Script trainiert ein Neural Netzwerk, mit den Daten aus Vezeichnissen
 die zusätzlich vorbereitete und erweiter werden.
 """
 
-from tensorflow import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 from utils import *
@@ -17,10 +16,11 @@ path = os.path.join(DATADIR, "images/train")
 path = pathlib.Path(path)
 image_count = len(list(path.glob('*/*.jpg')))
 
-BATCH_SIZE = 80
+BATCH_SIZE = 100
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 10
+EPOCHS = 15
+VIEW_EXAMPLES = False
 
 print("Working in: ", DATADIR)
 
@@ -31,11 +31,11 @@ print(CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
-    rotation_range=15,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2,
+    rotation_range=10,
+    width_shift_range=0.15,
+    height_shift_range=0.15,
+    shear_range=0.1,
+    zoom_range=0.15,
     horizontal_flip=True
 )
 
@@ -62,6 +62,20 @@ valid_generator = valid_datagen.flow_from_directory(
     class_mode="sparse",
     shuffle=True,
 )
+
+if VIEW_EXAMPLES:
+    sample_training_images, _ = next(train_generator)
+    images_arr = sample_training_images[:8]
+    fig, axes = plt.subplots(2, 4, figsize=(40, 40))
+    axes = axes.flatten()
+
+    for img, ax in zip(images_arr, axes):
+        ax.imshow(img.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
+        ax.axis('off')
+    plt.tight_layout()
+    plt.show()
+    print("Viewing examples and exiting")
+    exit(0)
 
 model = create_model()
 
@@ -96,3 +110,5 @@ plt.plot(epochs_range, val_loss, label="Validation Loss")
 plt.legend(loc="upper right")
 plt.title("Training and Validation Loss")
 plt.show()
+
+save_model(DATADIR, model)

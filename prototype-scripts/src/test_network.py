@@ -57,15 +57,20 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
           int(prediction[2] * 100),
           int(prediction[3] * 100), end="\t")
 
+    highest = -1
+
     if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD and prediction[3] < THRESHOLD:
         print("--")
     else:
-        CATEGORIES = ["ROCK", "PAPER", "SCISSORS", "EMPTY"]
+        CATEGORIES = ["EMPTY", "PAPER", "ROCK", "SCISSORS"]
         out = np.argmax(prediction)
 
         if isinstance(out, list):
             print(CATEGORIES[out[0]])
+            highest = out[0]
         else:
             print(CATEGORIES[out])
+            highest = out
 
+    # print(highest)
     rawCapture.truncate(0)
