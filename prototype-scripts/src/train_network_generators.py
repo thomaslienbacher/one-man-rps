@@ -9,18 +9,21 @@ from utils import *
 import numpy as np
 import pathlib
 import matplotlib.pyplot as plt
+import time
 
 DATADIR = "E:/Thomas/one-man-rps/data"
+
+start_time = time.time()
 
 path = os.path.join(DATADIR, "images/train")
 path = pathlib.Path(path)
 image_count = len(list(path.glob('*/*.jpg')))
 
-BATCH_SIZE = 100
+BATCH_SIZE = 80
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 15
-VIEW_EXAMPLES = False
+EPOCHS = 16
+VIEW_EXAMPLES = True
 
 print("Working in: ", DATADIR)
 
@@ -32,10 +35,10 @@ print(CLASS_NAMES)
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
     rotation_range=10,
-    width_shift_range=0.15,
-    height_shift_range=0.15,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
     shear_range=0.1,
-    zoom_range=0.15,
+    zoom_range=0.1,
     horizontal_flip=True
 )
 
@@ -65,8 +68,8 @@ valid_generator = valid_datagen.flow_from_directory(
 
 if VIEW_EXAMPLES:
     sample_training_images, _ = next(train_generator)
-    images_arr = sample_training_images[:8]
-    fig, axes = plt.subplots(2, 4, figsize=(40, 40))
+    images_arr = sample_training_images[:16]
+    fig, axes = plt.subplots(4, 4, figsize=(8, 8))
     axes = axes.flatten()
 
     for img, ax in zip(images_arr, axes):
@@ -74,8 +77,6 @@ if VIEW_EXAMPLES:
         ax.axis('off')
     plt.tight_layout()
     plt.show()
-    print("Viewing examples and exiting")
-    exit(0)
 
 model = create_model()
 
@@ -112,3 +113,5 @@ plt.title("Training and Validation Loss")
 plt.show()
 
 save_model(DATADIR, model)
+
+print("Execution took %s seconds" % (time.time() - start_time))
