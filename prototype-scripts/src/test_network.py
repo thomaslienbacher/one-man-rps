@@ -30,22 +30,18 @@ model.load_weights(path)
 print("Loaded model!")
 
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
-    # print("Captured .. ", end='')
     image = frame.array
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY) / 255
-
     input = image.reshape(1, IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1)
 
     prediction = model.predict([input])
 
-    # print("predicted")
-
-    # plt.imshow(input[0].reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
-    # plt.show()
-
-    # print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
-    #                                    int(prediction[0][1] * 100),
-    #                                    int(prediction[0][2] * 100)))
+    fig = plt.figure(frameon=False, facecolor="white", figsize=(2, 2))
+    ax = plt.Axes(fig, [0., 0., 1., 1.])
+    ax.set_axis_off()
+    fig.add_axes(ax)
+    ax.imshow(input[0].reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
+    plt.show()
 
     print("-", end="\t")
 
