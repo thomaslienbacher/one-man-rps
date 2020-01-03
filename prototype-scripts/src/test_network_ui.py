@@ -85,7 +85,7 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
             highest = out
 
     photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(image * 255))
-    canvas.create_image(0, 0, image=photo, anchor=tkinter.E)
+    canvas.create_image(100, 50, image=photo, anchor=tkinter.E)
 
     if highest == 0:
         cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
