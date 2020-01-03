@@ -38,7 +38,7 @@ window = tkinter.Tk()
 cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
 # Creating canvas with correct scaling
 height, width, no_channels = cv_img.shape
-canvas = tkinter.Canvas(window, width = width, height = height)
+canvas = tkinter.Canvas(window, width = width * 2, height = height)
 canvas.pack()
 
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
@@ -83,6 +83,9 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         else:
             print(CATEGORIES[out])
             highest = out
+
+    photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(image * 255))
+    canvas.create_image(0, 0, image=photo, anchor=tkinter.E)
 
     if highest == 0:
         cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
