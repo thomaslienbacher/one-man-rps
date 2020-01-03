@@ -17,6 +17,7 @@ import PIL.Image
 import PIL.ImageTk
 
 DATADIR = "/home/pi"
+GUI_SIZE = 500
 
 camera = PiCamera()
 camera.resolution = IMG_NET_SIZE
@@ -37,8 +38,7 @@ window = tkinter.Tk()
 # cv.COLOR_BGR2RGB declares the correct color format
 cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
 # Creating canvas with correct scaling
-height, width, no_channels = cv_img.shape
-canvas = tkinter.Canvas(window, width = width * 2, height = height)
+canvas = tkinter.Canvas(window, width=GUI_SIZE * 2, height=GUI_SIZE)
 canvas.pack()
 
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
@@ -86,27 +86,30 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
 
     if highest == 0:
         cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
+        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
     if highest == 1:
         cv_img = cv.cvtColor(cv.imread("scissors.png"), cv.COLOR_BGR2RGB)
+        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
     if highest == 2:
         cv_img = cv.cvtColor(cv.imread("paper.png"), cv.COLOR_BGR2RGB)
+        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
     if highest == 3:
         cv_img = cv.cvtColor(cv.imread("rock.png"), cv.COLOR_BGR2RGB)
+        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
-    photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(image * 255))
-    height, width, no_channels = cv_img.shape
-    canvas.create_image(width, 0, image=photo, anchor=tkinter.NW)
+    cam_photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv.resize(image * 255, (GUI_SIZE, GUI_SIZE))))
+    canvas.create_image(GUI_SIZE, 0, image=cam_photo, anchor=tkinter.NW)
 
     rawCapture.truncate(0)
     window.update()
