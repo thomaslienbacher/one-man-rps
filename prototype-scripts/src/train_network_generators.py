@@ -15,14 +15,14 @@ DATADIR = "E:/Thomas/one-man-rps/data"
 
 start_time = time.time()
 
-path = os.path.join(DATADIR, "images/train")
+path = os.path.join(DATADIR, "images/train2")
 path = pathlib.Path(path)
 image_count = len(list(path.glob('*/*.jpg')))
 
 BATCH_SIZE = 80
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 16
+EPOCHS = 20
 VIEW_EXAMPLES = True
 
 print("Working in: ", DATADIR)
@@ -34,11 +34,11 @@ print(CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
-    rotation_range=10,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    shear_range=0.1,
-    zoom_range=0.1,
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
     horizontal_flip=True
 )
 
@@ -46,7 +46,7 @@ valid_datagen = ImageDataGenerator(
     rescale=1. / 255,
 )
 
-path = os.path.join(DATADIR, "images/train")
+path = os.path.join(DATADIR, "images/train2")
 train_generator = train_datagen.flow_from_directory(
     directory=path,
     target_size=IMG_NET_SIZE,
@@ -56,7 +56,7 @@ train_generator = train_datagen.flow_from_directory(
     shuffle=True,
 )
 
-path = os.path.join(DATADIR, "images/valid")
+path = os.path.join(DATADIR, "images/valid2")
 valid_generator = valid_datagen.flow_from_directory(
     directory=path,
     target_size=IMG_NET_SIZE,

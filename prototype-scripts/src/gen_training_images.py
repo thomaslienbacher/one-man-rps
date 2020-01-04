@@ -19,7 +19,8 @@ camera.resolution = SIZE
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=SIZE)
 time.sleep(0.5)
-counter = 10000
+counter = 20000
+capturing = "empty"  # eg. scissors, rock, paper, empty
 
 if not os.path.exists("/tmp/images/rock"):
     os.makedirs("/tmp/images/rock")
@@ -48,11 +49,11 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         blur = cv.GaussianBlur(image, (5, 5), 0)
         ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
         print("and transformed!")
-        cv.imwrite("/tmp/images/scissors/image{:04d}.jpg".format(counter), th3)
+        cv.imwrite("/tmp/images/" + capturing + "/image{:04d}.jpg".format(counter), th3)
     else:
-        cv.imwrite("/tmp/images/scissors/image{:04d}.jpg".format(counter), image)
+        cv.imwrite("/tmp/images/" + capturing + "/image{:04d}.jpg".format(counter), image)
 
-    if counter % 100 == 0:
+    if counter % 80 == 0:
         if PRE_CONVERT:
             images = [image, 0, th1,
                       image, 0, th2,
@@ -69,9 +70,23 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
                 plt.subplot(3, 3, i * 3 + 3), plt.imshow(images[i * 3 + 2], "gray")
                 plt.title(titles[i * 3 + 2]), plt.xticks([]), plt.yticks([])
         else:
+            fig = plt.figure(frameon=False, facecolor="white", figsize=(2, 2))
+            ax = plt.Axes(fig, [0., 0., 1., 1.])
+            ax.set_axis_off()
+            fig.add_axes(ax)
             plt.imshow(cv.resize(image, (100, 100)), cmap="gray")
+            plt.show()
 
         plt.show()
 
     counter += 1
+
+    if counter % 500 == 0:
+        print("Sleeping for 20 seconds...")
+        time.sleep(20)
+
+    if counter % 22000 == 0:
+        print("Sleeping for 300 seconds...")
+        time.sleep(300)
+
     rawCapture.truncate(0)
