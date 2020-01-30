@@ -86,25 +86,25 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
 
     if highest == 0:
         cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
-        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
+        #cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
     if highest == 1:
         cv_img = cv.cvtColor(cv.imread("scissors.png"), cv.COLOR_BGR2RGB)
-        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
+        #cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
     if highest == 2:
         cv_img = cv.cvtColor(cv.imread("paper.png"), cv.COLOR_BGR2RGB)
-        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
+        #cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
     if highest == 3:
         cv_img = cv.cvtColor(cv.imread("rock.png"), cv.COLOR_BGR2RGB)
-        cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
+        #cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
 
