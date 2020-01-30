@@ -28,7 +28,7 @@ time.sleep(0.5)
 path = os.path.join(DATADIR, "v6_model_architecture.json")
 with open(path, "r") as f:
     model = model_from_json(f.read())
-path = os.path.join(DATADIR, "model_weights.h5")
+path = os.path.join(DATADIR, "v6_model_weights.h5")
 model.load_weights(path)
 print("Loaded model!")
 
