@@ -35,7 +35,7 @@ print("Loaded model!")
 # Window created with tkinter
 window = tkinter.Tk()
 # Creating canvas with correct scaling
-canvas = tkinter.Canvas(window, width=GUI_SIZE, height=GUI_SIZE)
+canvas = tkinter.Canvas(window, width=GUI_SIZE * 2, height=GUI_SIZE)
 canvas.pack()
 
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
@@ -104,6 +104,13 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         #cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
         photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
         canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
+
+    text = string(prediction[0] * 100) + " " + string(prediction[1] * 100) + " " + string(prediction[2] * 100) + " " + string(prediction[3] * 100)
+    label = Label(canvas, text=text, fg='black', bg='white')
+    label.pack()
+    canvas.create_window()
+    cam_photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv.resize(image * 255, (GUI_SIZE, GUI_SIZE))))
+    canvas.create_image(GUI_SIZE, 0, image=cam_photo, anchor=tkinter.NW)
 
     rawCapture.truncate(0)
     window.update()
