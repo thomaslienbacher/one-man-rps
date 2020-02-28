@@ -1,6 +1,6 @@
 """
 Dieses Script nimmt laded ein vortrainiertes Neural Netzwerk, und testet es mit
-Echzeit Bildern von der Kamera.
+Echzeit Bildern von der Kamera. Das Ergebnis und die Bilder werden grafisch dargestellt.
 """
 
 from tensorflow.keras.models import model_from_json, load_model
@@ -16,7 +16,7 @@ import tkinter
 import PIL.Image
 import PIL.ImageTk
 
-DATADIR = "/home/pi"
+DATADIR = "/home/pi/one-man-rps/data/model_backups"
 GUI_SIZE = 500
 
 camera = PiCamera()
@@ -25,52 +25,37 @@ camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
 time.sleep(0.5)
 
-path = os.path.join(DATADIR, "model_architecture.json")
+path = os.path.join(DATADIR, "v6_model_architecture.json")
 with open(path, "r") as f:
     model = model_from_json(f.read())
-path = os.path.join(DATADIR, "model_weights.h5")
+path = os.path.join(DATADIR, "v6_model_weights.h5")
 model.load_weights(path)
 print("Loaded model!")
 
 # Window created with tkinter
 window = tkinter.Tk()
-# Loading pic with cv
-# cv.COLOR_BGR2RGB declares the correct color format
 cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
-# Creating canvas with correct scaling
 canvas = tkinter.Canvas(window, width=GUI_SIZE * 2, height=GUI_SIZE)
 canvas.pack()
 
 for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
-    # print("Captured .. ", end='')
+    # capture image and predict it
     image = frame.array
     image = cv.cvtColor(image, cv.COLOR_RGB2GRAY) / 255
-
     input = image.reshape(1, IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1)
-
     prediction = model.predict([input])
 
-    # print("predicted")
-
-    # plt.imshow(input[0].reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
-    # plt.show()
-
-    # print("{:02d} {:02d} {:02d}".format(int(prediction[0][0] * 100),
-    #                                    int(prediction[0][1] * 100),
-    #                                    int(prediction[0][2] * 100)))
-
+    # print prediction percent
     print("-", end="\t")
-
     THRESHOLD = 0.6
     prediction = prediction[0]
-
     print(int(prediction[0] * 100),
           int(prediction[1] * 100),
           int(prediction[2] * 100),
           int(prediction[3] * 100), end="\t")
 
+    # print category with highest prediction value
     highest = -1
-
     if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD and prediction[3] < THRESHOLD:
         print("--")
     else:
@@ -84,6 +69,7 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
             print(CATEGORIES[out])
             highest = out
 
+    # visualize highest prediction
     if highest == 0:
         cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
         cv_img = cv.resize(cv_img, (GUI_SIZE, GUI_SIZE))
