@@ -1,6 +1,6 @@
 """
 Dieses Script nimmt laded ein vortrainiertes Neural Netzwerk, und testet es mit
-Echzeit Bildern von der Kamera.
+Echzeit Bildern von der Kamera. Das Ergebnis und die Bilder werden grafisch dargestellt.
 """
 
 from tensorflow.keras.models import model_from_json, load_model
@@ -98,7 +98,6 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     THRESHOLD = 0.6
     prediction = prediction[0]
     highest = -1
-
     if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD and prediction[3] < THRESHOLD:
         prediction_text = "E: {:<5.1f}  P: {:<5.1f}  R: {:<5.1f}  S: {:<5.1f} {:_>9}".format(
             prediction[0] * 100, prediction[1] * 100,
