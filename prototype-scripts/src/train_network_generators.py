@@ -3,17 +3,16 @@ Dieses Script trainiert ein Neural Netzwerk, mit den Daten aus Vezeichnissen
 die zusätzlich vorbereitete und erweiter werden.
 """
 
+import time
+start_time = time.time()
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 from utils import *
 import numpy as np
 import pathlib
 import matplotlib.pyplot as plt
-import time
 
 DATADIR = "E:/Thomas/one-man-rps/data"
-
-start_time = time.time()
 
 path = os.path.join(DATADIR, "images/train2")
 path = pathlib.Path(path)
@@ -22,23 +21,22 @@ image_count = len(list(path.glob('*/*.jpg')))
 BATCH_SIZE = 80
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 20
+EPOCHS = 2
 VIEW_EXAMPLES = True
 
 print("Working in: ", DATADIR)
-
-print(image_count)
-print(BATCH_SIZE)
-print(STEPS_PER_EPOCH)
-print(CLASS_NAMES)
+print("batch size", BATCH_SIZE)
+print("epochs", EPOCHS)
+print("steps per epoch", STEPS_PER_EPOCH)
+print("class names", CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
-    rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2,
+    rotation_range=21,
+    width_shift_range=0.21,
+    height_shift_range=0.21,
+    shear_range=0.21,
+    zoom_range=0.21,
     horizontal_flip=True
 )
 
@@ -76,6 +74,8 @@ if VIEW_EXAMPLES:
         ax.imshow(img.reshape(IMG_NET_SIZE[0], IMG_NET_SIZE[1]), cmap="gray")
         ax.axis('off')
     plt.tight_layout()
+    path = os.path.join(DATADIR, "examples_figure_" + time_escaped() + ".png")
+    plt.savefig(path)
     plt.show()
 
 model = create_model()
@@ -110,8 +110,10 @@ plt.plot(epochs_range, loss, label="Training Loss")
 plt.plot(epochs_range, val_loss, label="Validation Loss")
 plt.legend(loc="upper right")
 plt.title("Training and Validation Loss")
+path = os.path.join(DATADIR, "training_statistics_" + time_escaped() + ".png")
+plt.savefig(path)
 plt.show()
 
 save_model(DATADIR, model)
 
-print("Execution took %s seconds" % (time.time() - start_time))
+print("Execution took {} seconds".format(time.time() - start_time))

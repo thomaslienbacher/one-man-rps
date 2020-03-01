@@ -1,14 +1,21 @@
 import os
+from datetime import datetime
+
 from tensorflow import keras
 
 IMG_NET_SIZE = (128, 128)
 
 
+def time_escaped():
+    now_escaped = str(datetime.now()).replace(":", "_").replace(".", "_").replace(" ", "T")
+    return now_escaped
+
+
 def save_model(directory, model):
-    path = os.path.join(directory, "model_weights.h5")
+    path = os.path.join(directory, "model_weights_" + time_escaped() + ".h5")
     model.save_weights(path)
 
-    path = os.path.join(directory, "model_architecture.json")
+    path = os.path.join(directory, "model_architecture_" + time_escaped() + ".json")
     with open(path, "w") as f:
         f.write(model.to_json())
     print("Saved model!")
