@@ -103,7 +103,7 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
     prediction = prediction[0]
     highest = -1
     if prediction[0] < THRESHOLD and prediction[1] < THRESHOLD and prediction[2] < THRESHOLD and prediction[3] < THRESHOLD:
-        prediction_text = "E: {:>5.1f}  P: {:>5.1f}  R: {:>5.1f}  S: {:>5.1f} {:_>9}".format(
+        prediction_text = "E: {:>5.1f}  P: {:>5.1f}  R: {:>5.1f}  S: {:>5.1f} {:>8}".format(
             prediction[0] * 100, prediction[1] * 100,
             prediction[2] * 100, prediction[3] * 100, "--")
         panel_gesture.configure(image=photo_error)
