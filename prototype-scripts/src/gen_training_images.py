@@ -1,7 +1,6 @@
 """
-Diese Script liest die Bilder der Kamera aus und transformiert sie um einfacher
-verabeitet werden zu können. Alle 30 Bilder wird eine Diagramm der derzeitigen Verarbeitung
-dargestellt.
+Diese Script liest die Bilder der Kamera aus und transformiert sie, damit sie einfacher
+verabeitet werden zu können. Die Bilder werden dann im tmp Ordner gespeichert.
 """
 
 import os

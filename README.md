@@ -45,6 +45,8 @@ Then install Python 3 packages:
 
 #### 4. Clone this repository
 
+It's best to clone into the home directory (`/home/pi`).
+
 `$ git clone git@github.com:thomaslienbacher/one-man-rps.git`
 
 or
@@ -56,3 +58,15 @@ or
 Run a Python file to test if the main dependecies can be imported.
 
 `$ python3 one-man-rps/prototype-scripts/src/check_dependencies.py`
+
+#### 6. Install JetBrains Mono font
+
+1. Download [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
+2. Put the `JetBrainsMono-Regular.ttf` into `/home/pi/.fonts`, create the folder if it doesn't exist
+3. `$ sudo fc-cache -v -f`
+
+#### 7. Add to auto start
+
+TODO: This doesn't work yet because the DISPLAY env variable has to be set and the images are still loaded using relative paths.
+
+Edit `/etc/xdg/lxsession/LXDE-pi/autostart` and add this line at the end `@/usr/bin/python3 /home/pi/one-man-rps/prototype-scripts/src/rps_robot.py`

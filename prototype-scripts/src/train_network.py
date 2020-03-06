@@ -1,8 +1,9 @@
 """
-Dieses Script nimmt trainiert ein Neural Netzwerk, mit den Daten die vorher
-aufbereitet wurden.
+Dieses Script trainiert ein Neurales Netzwerk, mit den Daten die vorher aufbereitet wurden.
+Diese Methode ist nicht effizient das durch die großen Datenmengen und dementsprechend extrem großen
+Dateien der gesamte Prozess extrem verlangsamt wird.
+ACHTUNG: Dateipfade sind hardcoded!
 """
-
 
 from tensorflow import keras
 import pickle

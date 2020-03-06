@@ -1,6 +1,9 @@
 """
-Dieses Script ist der finale Schere Stein Papier Roboter. Es liest den Kamerafeed, erkennt die Geste
-und stellt das Gegenzeichen grafisch dar.
+Dieses Script ist der finale Programm für den Schere Stein Papier Roboter. Es liest den Kamerafeed,
+erkennt die Geste und stellt das Gegenzeichen grafisch dar. Zusätzlich die Wahrscheinlichkeit der Erkennung
+angezeigt. Die vortrainierten Neuralen Netzwerke werden aus dem git Repository geladen. Das UI wird im Fullscreen
+Mode angezeigt und die UI Elemente werden anhand der Bildschirmgröße automatisch skaliert.
+ACHTUNG: Dateipfade sind hardcoded!
 """
 
 from tensorflow.keras.models import model_from_json

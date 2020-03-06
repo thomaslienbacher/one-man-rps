@@ -1,3 +1,7 @@
+"""
+In diesem Script werden Funktionen und Konstanten definiert die in mehreren anderen Scripts benutzt werden.
+"""
+
 import os
 from datetime import datetime
 
@@ -27,12 +31,12 @@ def create_model():
         keras.layers.MaxPooling2D((3, 3)),
         keras.layers.Conv2D(64, (5, 5), activation='relu'),
         keras.layers.MaxPooling2D((2, 2)),
-        keras.layers.Conv2D(64, (5, 5), activation='relu'),
+        keras.layers.Conv2D(56, (5, 5), activation='relu'),
         keras.layers.MaxPooling2D((2, 2)),
         keras.layers.Flatten(),
         keras.layers.Dropout(0.30),
-        keras.layers.Dense(72, activation='relu'),
-        keras.layers.Dropout(0.08),
+        keras.layers.Dense(70, activation='relu'),
+        keras.layers.Dropout(0.09),
         keras.layers.Dense(4, activation='softmax')
     ])
 

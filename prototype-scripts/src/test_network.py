@@ -1,8 +1,9 @@
 """
-Dieses Script nimmt laded ein vortrainiertes Neural Netzwerk, und testet es mit
-Echzeit Bildern von der Kamera.
+Dieses Script laded ein vortrainiertes Neural Netzwerk, und testet es mit
+Echzeit Bildern von der Kamera. Die Ergebnisse der Erkennung werden in der Konsole ausgegeben.
+Die Kamera Frames werden mittels matplotlib visualisiert und können in PyCharm angesehen werden.
+ACHTUNG: Dateipfade sind hardcoded!
 """
-
 
 from tensorflow.keras.models import model_from_json, load_model
 import os
@@ -22,10 +23,10 @@ camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
 time.sleep(0.5)
 
-path = os.path.join(DATADIR, "v6_model_architecture.json")
+path = os.path.join(DATADIR, "v7_model_architecture.json")
 with open(path, "r") as f:
     model = model_from_json(f.read())
-path = os.path.join(DATADIR, "v6_model_weights.h5")
+path = os.path.join(DATADIR, "v7_model_weights.h5")
 model.load_weights(path)
 print("Loaded model!")
 

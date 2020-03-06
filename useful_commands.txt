@@ -1,4 +1,4 @@
-# List of usefull linux commands
+# List of useful linux commands
 
 # Create archive of folder
 tar cfzv images.tar.gz images
@@ -6,5 +6,11 @@ tar cfzv images.tar.gz images
 # Create video out of single images
 ffmpeg -f image2 -pattern_type glob -framerate 32 -i 'image*.jpg' scissors.avi
 
-# Stream video from camera over network
+# Stream video from camera over network using port 7799
 raspivid -t 9999999 -n -w 1280 -h 720 -fps 30 -o - | nc -l 7799
+
+# Start VNC server to mirror display :0 (requires sudo apt install tigervnc-standalone-server tigervnc-xorg-extension tigervnc-viewer)
+x0vncserver -passwordfile ~/.vnc/passwd -display :0
+
+# Set environment variable
+export KEY=VALUE

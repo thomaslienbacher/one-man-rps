@@ -1,6 +1,11 @@
 """
-Dieses Script nimmt laded ein vortrainiertes Neural Netzwerk, und testet es mit
-Echzeit Bildern von der Kamera. Das Ergebnis und die Bilder werden grafisch dargestellt.
+Dieses Script laded ein vortrainiertes Neural Netzwerk, und testet es mit
+Echzeit Bildern von der Kamera. Die Ergebnisse der Erkennung werden in der Konsole ausgegeben und
+grafisch Dargestellt. In dem UI wird das Gegenzeichen, das Kamera Frame und die einzelnen Wahrscheinlichkeiten
+der Erkennung angezeigt. Das UI wird im Fullscreen Mode angezeigt und die UI Elemente werden anhand der
+Bildschirmgröße automatisch skaliert. Diese Script dient zur Entwicklung und kann bei technischen
+Demonstrationen genutzt werden wo mehr Informationen angezeigt werden sollten.
+ACHTUNG: Dateipfade sind hardcoded!
 """
 
 from tensorflow.keras.models import model_from_json, load_model
@@ -9,7 +14,6 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 import cv2 as cv
-import matplotlib.pyplot as plt
 from utils import *
 import numpy as np
 from tkinter import *
@@ -27,10 +31,10 @@ camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
 time.sleep(0.5)
 
-path = os.path.join(DATADIR, "v5_model_architecture.json")
+path = os.path.join(DATADIR, "v7_model_architecture.json")
 with open(path, "r") as f:
     model = model_from_json(f.read())
-path = os.path.join(DATADIR, "v5_model_weights.h5")
+path = os.path.join(DATADIR, "v7_model_weights.h5")
 model.load_weights(path)
 print("Loaded model!")
 

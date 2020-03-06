@@ -1,8 +1,10 @@
 """
 Dieses Script nimmt die transformierten Bilder und bereitet die Daten für
-Tensorflow auf. Diese Daten werden genutzt um das Neurale Netzwerk zu trainieren.
+Tensorflow auf. Die Daten werden dabei in Arrays konvertiert und in eine Datei gespeichert,
+diese Dateien werden dann von train_network.py genutzt um das Neurale Netzwerk zu trainieren.
+Diese Methode ist sehr ineffizient, da bei den großen Datenmengen extrem große Dateien entstehen die
+denn gesamten Prozess sehr stark verlangsamen. ACHTUNG: Dateipfade sind hardcoded!
 """
-
 
 import numpy as np
 import os

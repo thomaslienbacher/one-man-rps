@@ -1,6 +1,10 @@
 """
-Dieses Script trainiert ein Neural Netzwerk, mit den Daten aus Vezeichnissen
-die zusätzlich vorbereitete und erweiter werden.
+Dieses Script trainiert ein Neurales Netzwerk, mit den Bildern aus Vezeichnissen die vorher
+mit split_train_valid.py getrennt wurden. Bei dieser Trainingsmethode werden die Bilder aus
+den Verzeichnissen gelesen und gleichzeitig durch ImageDataGenerators verändert um künstlich
+mehr verschiedene Bilder zu generieren. Zusätzlich werden Diagramme von Beispiel Bildern mittels
+matplotlib erzeugt und auch gespeichert. Auch eine Statistik des Trainings wird so erzeugt und
+gespeichert. ACHTUNG: Dateipfade sind hardcoded!
 """
 
 import time

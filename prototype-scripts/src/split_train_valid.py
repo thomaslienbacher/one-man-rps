@@ -1,5 +1,8 @@
 """
-Dieses Script teilt die Bilder in train und valid Ordner, indem sie kopiert werden.
+Dieses Script teilt alle Bilder in einen train und valid Ordner, die Trennung erfolgt mittels einfaches
+kopieren des Bildes in den Ordner. Die Bilder müssen getrennt werden, da für das Trainingsprogramm Bilder
+benötigt werden um es zu trainieren (train) und andere um das Netzwerk nach einer Trainingsepoche zu testen
+bzw. zu validieren (valid). ACHTUNG: Dateipfade sind hardcoded!
 """
 
 import os

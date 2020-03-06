@@ -1,6 +1,7 @@
 """
-Dieses Script wird benutzt um schnell einen UI Prototyp zu erstellen.
+Dieses Script wird benutzt um schnell einen UI Prototyp mit Tkinter zu erstellen.
 """
+
 import time
 import tkinter
 
@@ -21,7 +22,7 @@ window_width = window.winfo_width()
 
 Style().configure("TFrame", background="white")
 Style().configure("CustomPanel.TLabel", borderwidth=BORDER, relief="flat", background="black")
-Style().configure("CustomLabel.TLabel", background="white", font="helvetica 34")
+Style().configure("CustomLabel.TLabel", background="white", font="jetbrainsmono 34")
 
 
 def key_up(e):
@@ -57,7 +58,7 @@ cam_photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img * 2))
 panel_cam.configure(image=cam_photo)
 
 label_frame = Frame(window)
-label = Label(label_frame, text="sandbox-text", style="CustomLabel.TLabel")
+label = Label(label_frame, text="let var: i64 = 88 * 33;", style="CustomLabel.TLabel")
 label.pack(side="bottom", fill="y", anchor="n", expand=TRUE)
 label_frame.pack(side="bottom", fill="both", anchor="center", expand=True)
 label_frame.update()
