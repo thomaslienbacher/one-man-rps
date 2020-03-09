@@ -25,7 +25,7 @@ image_count = len(list(path.glob('*/*.jpg')))
 BATCH_SIZE = 80
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 2
+EPOCHS = 21
 VIEW_EXAMPLES = True
 
 print("Working in: ", DATADIR)
@@ -36,11 +36,11 @@ print("class names", CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
-    rotation_range=21,
-    width_shift_range=0.21,
-    height_shift_range=0.21,
-    shear_range=0.21,
-    zoom_range=0.21,
+    rotation_range=10,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
+    shear_range=0.1,
+    zoom_range=0.1,
     horizontal_flip=True
 )
 
