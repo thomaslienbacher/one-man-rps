@@ -22,8 +22,10 @@ import PIL.ImageTk
 REPODIR = "/home/pi/one-man-rps/"
 PADDING = 12
 BORDER = 2
+VERTICAL_FLIP = True
 
 camera = PiCamera()
+camera.vflip = VERTICAL_FLIP
 camera.resolution = IMG_NET_SIZE
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)

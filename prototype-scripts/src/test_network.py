@@ -18,6 +18,7 @@ import numpy as np
 DATADIR = "/home/pi/one-man-rps/data/model_backups"
 
 camera = PiCamera()
+camera.vflip = True
 camera.resolution = IMG_NET_SIZE
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
