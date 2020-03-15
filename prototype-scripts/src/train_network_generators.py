@@ -8,6 +8,7 @@ gespeichert. ACHTUNG: Dateipfade sind hardcoded!
 """
 
 import time
+
 start_time = time.time()
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
@@ -15,6 +16,7 @@ from utils import *
 import numpy as np
 import pathlib
 import matplotlib.pyplot as plt
+from pprint import pprint
 
 DATADIR = "E:/Thomas/one-man-rps/data"
 
@@ -22,10 +24,10 @@ path = os.path.join(DATADIR, "images/train2")
 path = pathlib.Path(path)
 image_count = len(list(path.glob('*/*.jpg')))
 
-BATCH_SIZE = 80
+BATCH_SIZE = 84
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 21
+EPOCHS = 23
 VIEW_EXAMPLES = True
 
 print("Working in: ", DATADIR)
@@ -36,13 +38,17 @@ print("class names", CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
-    rotation_range=10,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    shear_range=0.1,
-    zoom_range=0.1,
+    rotation_range=15,
+    width_shift_range=0.15,
+    height_shift_range=0.15,
+    shear_range=0.15,
+    zoom_range=0.15,
+    brightness_range=(0.80, 1.20),
     horizontal_flip=True
 )
+
+print("train ImageDataGenerator: ")
+pprint(vars(train_datagen))
 
 valid_datagen = ImageDataGenerator(
     rescale=1. / 255,
@@ -70,8 +76,8 @@ valid_generator = valid_datagen.flow_from_directory(
 
 if VIEW_EXAMPLES:
     sample_training_images, _ = next(train_generator)
-    images_arr = sample_training_images[:16]
-    fig, axes = plt.subplots(4, 4, figsize=(8, 8))
+    images_arr = sample_training_images[:25]
+    fig, axes = plt.subplots(5, 5, figsize=(10, 10))
     axes = axes.flatten()
 
     for img, ax in zip(images_arr, axes):

@@ -44,7 +44,7 @@ window = Tk()
 window.attributes("-fullscreen", True)
 window.configure(background="white", cursor="none")
 window.update()
-image_size = int(window.winfo_width() * 0.66) - PADDING * 2 - BORDER * 2
+image_size = int(window.winfo_height() * 0.8) - PADDING * 2 - BORDER * 2
 
 Style().configure("TFrame", background="white")
 Style().configure("CustomPanel.TLabel", borderwidth=BORDER, relief="flat", background="black")
