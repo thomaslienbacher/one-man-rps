@@ -1,6 +1,6 @@
 """
 Diese Script liest die Bilder der Kamera aus und transformiert sie, damit sie einfacher
-verabeitet werden zu können. Die Bilder werden dann im tmp Ordner gespeichert.
+verarbeitet werden zu können. Die Bilder werden dann im tmp Ordner gespeichert.
 """
 
 import os
@@ -13,13 +13,15 @@ import matplotlib.pyplot as plt
 # setup
 PRE_CONVERT = False  # wether to apply Otsu filtering to images
 SIZE = (400, 400)
+CAPTURING = "empty"  # eg. scissors, rock, paper, empty
+
 camera = PiCamera()
 camera.resolution = SIZE
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=SIZE)
 time.sleep(0.5)
+
 counter = 20000
-capturing = "empty"  # eg. scissors, rock, paper, empty
 
 if not os.path.exists("/tmp/images/rock"):
     os.makedirs("/tmp/images/rock")
@@ -34,7 +36,8 @@ if not os.path.exists("/tmp/images/empty"):
     os.makedirs("/tmp/images/empty")
 
 # start and wait until hand is ready to record
-for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=True):
+for frame in camera.capture_continuous(rawCapture, format="rgb",
+                                       use_video_port=True):
     print("Captured:", counter)
     image = frame.array
 
@@ -48,18 +51,23 @@ for frame in camera.capture_continuous(rawCapture, format="rgb", use_video_port=
         blur = cv.GaussianBlur(image, (5, 5), 0)
         ret3, th3 = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
         print("and transformed!")
-        cv.imwrite("/tmp/images/" + capturing + "/image{:04d}.jpg".format(counter), th3)
+        cv.imwrite("/tmp/images/" + CAPTURING +
+                   "/image{:04d}.jpg".format(counter), th3)
     else:
-        cv.imwrite("/tmp/images/" + capturing + "/image{:04d}.jpg".format(counter), image)
+        cv.imwrite("/tmp/images/" + CAPTURING +
+                   "/image{:04d}.jpg".format(counter), image)
 
     if counter % 80 == 0:
         if PRE_CONVERT:
             images = [image, 0, th1,
                       image, 0, th2,
                       blur, 0, th3]
-            titles = ["Original Noisy Image", "Histogram", "Global Thresholding (v=127)",
-                      "Original Noisy Image", "Histogram", "Otsu's Thresholding",
-                      "Gaussian filtered Image", "Histogram", "Otsu's Thresholding"]
+            titles = ["Original Noisy Image", "Histogram",
+                      "Global Thresholding (v=127)",
+                      "Original Noisy Image", "Histogram",
+                      "Otsu's Thresholding",
+                      "Gaussian filtered Image", "Histogram",
+                      "Otsu's Thresholding"]
 
             for i in range(3):
                 plt.subplot(3, 3, i * 3 + 1), plt.imshow(images[i * 3], "gray")

@@ -1,5 +1,5 @@
 """
-Dieses Script wird benutzt um schnell einen UI Prototyp mit Tkinter zu erstellen.
+Dieses Script wird benutzt, um schnell einen UI Prototyp mit Tkinter zu erstellen.
 """
 
 import time

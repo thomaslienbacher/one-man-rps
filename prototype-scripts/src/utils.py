@@ -1,5 +1,5 @@
 """
-In diesem Script werden Funktionen und Konstanten definiert die in mehreren anderen Scripts benutzt werden.
+In diesem Script werden Funktionen und Konstanten definiert, die in mehreren anderen Scripts benutzt werden.
 """
 
 import os
@@ -11,14 +11,14 @@ IMG_NET_SIZE = (128, 128)
 
 
 def time_escaped():
-    now_escaped = str(datetime.now()).replace(":", "_").replace(".", "_").replace(" ", "T")
+    now_escaped = str(datetime.now())\
+        .replace(":", "_").replace(".", "_").replace(" ", "T")
     return now_escaped
 
 
 def save_model(directory, model):
     path = os.path.join(directory, "model_weights_" + time_escaped() + ".h5")
     model.save_weights(path)
-
     path = os.path.join(directory, "model_architecture_" + time_escaped() + ".json")
     with open(path, "w") as f:
         f.write(model.to_json())
@@ -27,7 +27,8 @@ def save_model(directory, model):
 
 def create_model():
     model = keras.Sequential([
-        keras.layers.Conv2D(32, (5, 5), activation='relu', input_shape=(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1)),
+        keras.layers.Conv2D(32, (5, 5), activation='relu',
+                            input_shape=(IMG_NET_SIZE[0], IMG_NET_SIZE[1], 1)),
         keras.layers.MaxPooling2D((3, 3)),
         keras.layers.Conv2D(64, (5, 5), activation='relu'),
         keras.layers.MaxPooling2D((2, 2)),

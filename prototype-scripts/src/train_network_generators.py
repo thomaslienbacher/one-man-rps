@@ -1,7 +1,7 @@
 """
 Dieses Script trainiert ein Neurales Netzwerk, mit den Bildern aus Vezeichnissen die vorher
 mit split_train_valid.py getrennt wurden. Bei dieser Trainingsmethode werden die Bilder aus
-den Verzeichnissen gelesen und gleichzeitig durch ImageDataGenerators verändert um künstlich
+den Verzeichnissen  gelesen und gleichzeitig durch ImageDataGenerators verändert, um künstlich
 mehr verschiedene Bilder zu generieren. Zusätzlich werden Diagramme von Beispiel Bildern mittels
 matplotlib erzeugt und auch gespeichert. Auch eine Statistik des Trainings wird so erzeugt und
 gespeichert. ACHTUNG: Dateipfade sind hardcoded!
@@ -24,11 +24,11 @@ path = os.path.join(DATADIR, "images/train2")
 path = pathlib.Path(path)
 image_count = len(list(path.glob('*/*.jpg')))
 
-BATCH_SIZE = 84
+BATCH_SIZE = 72
 STEPS_PER_EPOCH = np.ceil(image_count / BATCH_SIZE)
 CLASS_NAMES = np.array([item.name for item in path.glob('*')])
-EPOCHS = 23
-VIEW_EXAMPLES = True
+EPOCHS = 17
+VIEW_EXAMPLES = False
 
 print("Working in: ", DATADIR)
 print("batch size", BATCH_SIZE)
@@ -38,12 +38,12 @@ print("class names", CLASS_NAMES)
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
-    rotation_range=15,
-    width_shift_range=0.15,
-    height_shift_range=0.15,
-    shear_range=0.15,
-    zoom_range=0.15,
-    brightness_range=(0.80, 1.20),
+    rotation_range=10,
+    width_shift_range=0.10,
+    height_shift_range=0.10,
+    shear_range=0.10,
+    zoom_range=0.10,
+    brightness_range=(0.95, 1.05),
     horizontal_flip=True
 )
 
@@ -76,8 +76,8 @@ valid_generator = valid_datagen.flow_from_directory(
 
 if VIEW_EXAMPLES:
     sample_training_images, _ = next(train_generator)
-    images_arr = sample_training_images[:25]
-    fig, axes = plt.subplots(5, 5, figsize=(10, 10))
+    images_arr = sample_training_images[:16]
+    fig, axes = plt.subplots(4, 4, figsize=(10, 10))
     axes = axes.flatten()
 
     for img, ax in zip(images_arr, axes):

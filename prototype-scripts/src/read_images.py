@@ -1,6 +1,6 @@
 """
-Dieses Script streamt das Video der PiCamera und visualisert die einzelnen Frames mittels
-matplotlib. Die Plots werden dann innerhalb PyCharm visualisiert werden.
+Dieses Script streamt das Video der PiCamera und visualisiert die einzelnen Frames mittels
+matplotlib. Die Plots werden dann innerhalb von PyCharm visualisiert.
 """
 
 import sys

@@ -1,9 +1,9 @@
 """
 Dieses Script nimmt die transformierten Bilder und bereitet die Daten für
 Tensorflow auf. Die Daten werden dabei in Arrays konvertiert und in eine Datei gespeichert,
-diese Dateien werden dann von train_network.py genutzt um das Neurale Netzwerk zu trainieren.
-Diese Methode ist sehr ineffizient, da bei den großen Datenmengen extrem große Dateien entstehen die
-denn gesamten Prozess sehr stark verlangsamen. ACHTUNG: Dateipfade sind hardcoded!
+diese Dateien werden dann von train_network.py genutzt, um das Neurale Netzwerk zu trainieren.
+Diese Methode ist sehr ineffizient, da bei den großen Datenmengen extrem große Dateien entstehen, die
+den gesamten Prozess sehr stark verlangsamen. ACHTUNG: Dateipfade sind hardcoded!
 """
 
 import numpy as np
@@ -27,7 +27,7 @@ for category in CATEGORIES:
     print("Loading images for", category)
 
     path = os.path.join(DATADIR, "images/all", category)
-    for file in tqdm(iterable=os.listdir(path), file=sys.stdout):
+    for file in tqdm(iterable=os.listdir(path)[:50], file=sys.stdout):
         img = cv2.imread(os.path.join(path, file), cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, IMG_NET_SIZE) / 255
         # img2 = cv2.flip(img, 1)
@@ -46,9 +46,12 @@ for features, label in dataset:
     X.append(features)
     y.append(label)
 
+print(type(X), type(y), type(dataset))
+
 X = np.array(X)
 y = np.array(y)
 
+print(type(X), type(y))
 print("Dumping X and y...")
 
 path = os.path.join(DATADIR, "X.pickle")

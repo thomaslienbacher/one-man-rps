@@ -1,9 +1,9 @@
 """
 Dieses Script laded ein vortrainiertes Neural Netzwerk, und testet es mit
-Echzeit Bildern von der Kamera. Die Ergebnisse der Erkennung werden in der Konsole ausgegeben und
-grafisch Dargestellt. In dem UI wird das Gegenzeichen, das Kamera Frame und die einzelnen Wahrscheinlichkeiten
+Echtzeit Bildern von der Kamera. Die Ergebnisse der Erkennung werden in der Konsole ausgegeben und
+grafisch dargestellt. In dem UI wird das Gegenzeichen, das Kamera Frame und die einzelnen Wahrscheinlichkeiten
 der Erkennung angezeigt. Das UI wird im Fullscreen Mode angezeigt und die UI Elemente werden anhand der
-Bildschirmgröße automatisch skaliert. Diese Script dient zur Entwicklung und kann bei technischen
+Bildschirmgröße automatisch skaliert. Dieses Script dient zur Entwicklung und kann bei technischen
 Demonstrationen genutzt werden wo mehr Informationen angezeigt werden sollten.
 ACHTUNG: Dateipfade sind hardcoded!
 """

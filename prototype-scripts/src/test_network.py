@@ -1,6 +1,6 @@
 """
 Dieses Script laded ein vortrainiertes Neural Netzwerk, und testet es mit
-Echzeit Bildern von der Kamera. Die Ergebnisse der Erkennung werden in der Konsole ausgegeben.
+Echtzeit Bildern von der Kamera. Die Ergebnisse der Erkennung werden in der Konsole ausgegeben.
 Die Kamera Frames werden mittels matplotlib visualisiert und können in PyCharm angesehen werden.
 ACHTUNG: Dateipfade sind hardcoded!
 """

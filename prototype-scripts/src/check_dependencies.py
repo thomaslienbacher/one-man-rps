@@ -1,5 +1,5 @@
 """
-Diese Script kann genutzt werden um zu überprüfen ob alle Python Bibliotheken installiert wurden.
+Diese Script kann genutzt werden, um zu überprüfen ob alle Python Bibliotheken installiert wurden.
 Wenn am Ende ein Smiley kommt ist höchst wahrscheinlich alles korrekt installiert.
 """
 

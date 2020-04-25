@@ -9,7 +9,7 @@
 
 #include <libssh/libsshpp.hpp>
 
-// #define CAPTURE_ENABLE
+#define CAPTURE_ENABLE
 
 int stream_camera(const std::string &host) {
     cv::VideoCapture cv;
@@ -28,7 +28,9 @@ int stream_camera(const std::string &host) {
             cv::imshow(conn, mat);
 #ifdef CAPTURE_ENABLE
             std::cout << counter << "\n";
-            cv::imwrite((datapath / ("scissors_" + std::to_string(counter) + ".png")).generic_u8string(), mat);
+            cv::imwrite((datapath / ("scissors_" +
+                                     std::to_string(counter) + ".png"))
+                                .generic_u8string(), mat);
 
             if (counter == 20000) {
                 std::exit(0);
@@ -75,10 +77,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::string host(argv[1]);
+    std::string host(argv[1]), username(argv[3]), password;
     int port = std::strtol(argv[2], nullptr, 10);
-    std::string username(argv[3]);
-    std::string password;
 
     if (char *passenv = getenv("VS_PASSWORD")) {
         password = std::string(passenv);

@@ -1,5 +1,5 @@
 """
-Dieses Script wird genutzt um die Beispiel Abbildungen für die schriftliche Arbeit zu generieren.
+Dieses Script wird genutzt, um die Beispiel Abbildungen für die schriftliche Arbeit zu generieren.
 ACHTUNG: Dateipfade sind hardcoded!
 """
 
@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 import os
 import random
 from utils import *
+import numpy as np
 from pprint import pprint
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 matplotlib.rcParams['figure.titlesize'] = 'large'
 matplotlib.rcParams['font.size'] = 20
@@ -71,13 +73,15 @@ def single_bw():
 
 def otsu_binarization():
     images = []
+    img = cv.cvtColor(cv.imread(r"E:\Thomas\one-man-rps\data\scissors_8609.png"), cv.COLOR_BGR2RGB)
+    images.append(cv.resize(img, (128, 128)))
 
     for category in CATEGORIES:
         dir = os.path.join(DATADIR, "images/videostreaming", category)
         files = list(map(lambda f: os.path.join(dir, f), os.listdir(dir)))
         random.shuffle(files)
         img = cv.cvtColor(cv.imread(files[0]), cv.COLOR_BGR2RGB)
-        images.append(cv.resize(img, (128, 128)))
+        # images.append(cv.resize(img, (128, 128)))
 
     for img, category in zip(images, CATEGORIES):
         img = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
@@ -89,9 +93,9 @@ def otsu_binarization():
         transformed = [img, 0, th1,
                        img, 0, th2,
                        blur, 0, th3]
-        titles = ['Original', 'Histogram', 'Global Thresholding (c = 127)',
-                  'Original', 'Histogram', "Otsu's Thresholding",
-                  'Gaussian Filter', 'Histogram', "Otsu's Thresholding"]
+        titles = ['Original', 'Histogramm', 'Schwellenwert (c = 127)',
+                  'Original', 'Histogramm', "Otsu's Methode",
+                  'Gaußsche Unschärfe', 'Histogramm', "Otsu's Methode"]
 
         fig, axes = plt.subplots(3, 3, figsize=(17, 16), gridspec_kw={'width_ratios': [4, 5, 4]})
         axes = axes.flatten()
@@ -111,11 +115,100 @@ def otsu_binarization():
             axes[i * 3 + 2].set_title(titles[i * 3 + 2])
             axes[i * 3 + 2].set_anchor('S')
 
+        # fig.suptitle("Beispiel Otsu's Methode", y=0.4)
         plt.tight_layout()
         path = os.path.join(DATADIR, "example_plotter_ob_" + category[:4] + "_" + time_escaped() + ".png")
         plt.savefig(path)
         plt.show()
 
 
-for _ in range(4):
-    otsu_binarization()
+def perf_trace_2():
+    fig, axes = plt.subplots(2, 1, figsize=(12, 14))
+    axes = axes.flatten()
+
+    x = np.arange(0, 30, 0.02)  # start,stop,step
+    y = np.cos(x / 7) * 40 + 50
+    z = np.cos(x / 4) * 40 + 50
+
+    axes[0].plot(x, y)
+    axes[0].set_xlabel('Trainingszeit bis 30s')
+    axes[0].set_ylabel('prozentuelle Auslastung')
+    axes[0].set_title('Auslastung CPU')
+    axes[0].set_xlim([0, 30])
+    axes[0].set_ylim([0, 100])
+
+    axes[1].plot(x, z)
+    axes[1].set_xlabel('Trainingszeit bis 30s')
+    axes[1].set_ylabel('prozentuelle Auslastung')
+    axes[1].set_title('Auslastung HDD')
+    axes[1].set_xlim([0, 30])
+    axes[1].set_ylim([0, 100])
+
+    plt.tight_layout()
+    path = os.path.join(DATADIR, "example_plotter_pts2_" + time_escaped() + ".png")
+    plt.savefig(path)
+    plt.show()
+
+
+def perf_trace_1():
+    x = np.arange(0, 30, 0.02)  # start,stop,step
+    y = np.cos(x / 7) * 40 + 50
+    z = np.cos(x / 4) * 40 + 50
+
+    plt.figure(figsize=(12, 7))
+    plt.plot(x, y, x, z)
+    plt.xlabel('Trainingszeit bis 35s')
+    plt.ylabel('prozentuelle Auslastung')
+    plt.title('Auslastung CPU und HDD')
+    plt.legend(['CPU', 'HDD'])
+    plt.xlim([0, 30])
+    plt.ylim([0, 130])
+
+    plt.tight_layout()
+    path = os.path.join(DATADIR, "example_plotter_pts1_" + time_escaped() + ".png")
+    plt.savefig(path)
+    plt.show(bbox_inches='tight', pad_inches=0)
+
+
+def image_data_generator():
+    DATADIR = "E:/Thomas/one-man-rps/data"
+    train_datagen = ImageDataGenerator(
+        rescale=1. / 255,
+        rotation_range=20,
+        width_shift_range=0.18,
+        height_shift_range=0.18,
+        shear_range=0.18,
+        zoom_range=0.20,
+        brightness_range=(0.80, 1.20),
+    )
+
+    train_generator = train_datagen.flow_from_directory(
+        directory=os.path.join(DATADIR, "image_data_generator"),
+        target_size=(280, 280),
+        color_mode="grayscale",
+        batch_size=200,
+        class_mode="sparse",
+        shuffle=False,
+    )
+
+    fig, axes = plt.subplots(6, 4, figsize=(12, 18))
+    axes = axes.flatten()
+
+    for i in range(6):
+        sample_training_images, _ = next(train_generator)
+
+        for img, a in zip(sample_training_images[:4], range(4)):
+            d = [3, 2, 1, 0][a]
+            axes[i * 4 + d].imshow(img.reshape(280, 280), cmap="gray")
+            axes[i * 4 + d].axis('off')
+            if i == 0:
+                axes[i * 4 + d].set_title(KATEGORIEN[d])
+
+    plt.tight_layout()
+    path = os.path.join(DATADIR, "examples_figure_idg_" + time_escaped() + ".png")
+    plt.savefig(path)
+    plt.show()
+
+
+for _ in range(6):
+    image_data_generator()
