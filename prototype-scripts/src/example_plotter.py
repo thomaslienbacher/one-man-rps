@@ -8,13 +8,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 import os
 import random
+
+from matplotlib import gridspec
 from utils import *
 import numpy as np
 from pprint import pprint
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-matplotlib.rcParams['figure.titlesize'] = 'large'
-matplotlib.rcParams['font.size'] = 20
+# matplotlib.rcParams['figure.titlesize'] = 'large'
+# matplotlib.rcParams['font.size'] = 20
 
 DATADIR = "E:/Thomas/one-man-rps/data"
 CATEGORIES = ["scissors", "rock", "paper", "empty"]
@@ -210,5 +212,81 @@ def image_data_generator():
     plt.show()
 
 
-for _ in range(6):
-    image_data_generator()
+def training_data():
+    amount = 6
+    fig, axes = plt.subplots(3, amount, figsize=(6 * 5, 3 * 5))
+    axes = axes.flatten()
+    images = []
+
+    for category in CATEGORIES:
+        dir = os.path.join(DATADIR, "images/videostreaming", category)
+        files = list(map(lambda f: os.path.join(dir, f), os.listdir(dir)))
+        random.shuffle(files)
+        for j in range(amount):
+            img = cv.cvtColor(cv.imread(files[j]), cv.COLOR_BGR2RGB)
+            images.append(cv.resize(img, SIZE))
+
+    random.shuffle(images)
+
+    for img, ax in zip(images, axes):
+        ax.imshow(img)
+        ax.axis('off')
+
+    plt.tight_layout()
+    path = os.path.join(DATADIR, "example_plotter_td_" + time_escaped() + ".png")
+    plt.savefig(path)
+    plt.show()
+
+
+def sample_model_statistics():
+    epochs = 14
+    x = np.arange(0, epochs, 0.1)  # start,stop,step
+    y = np.cos(x * 0.4) / 2 + 0.5
+    z = np.cos(x * 0.3) / 2 + 0.5
+
+    plt.figure(figsize=(8, 8))
+    plt.subplot(1, 2, 1)
+    plt.plot(x, -y + 1, label="Trainings Accuracy")
+    plt.plot(x, -z + 1, label="Validierungs Accuracy")
+    plt.legend(loc="lower right")
+    plt.title("Trainings und Validierungs Accuracy")
+    plt.xlabel('Epochen')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(x, y, label="Trainings Loss")
+    plt.plot(x, z, label="Validierungs Loss")
+    plt.legend(loc="upper right")
+    plt.title("Trainings und Validierungs Loss")
+    plt.xlabel('Epochen')
+
+    # plt.tight_layout()
+    path = os.path.join(DATADIR, "example_plotter_sms_" + time_escaped() + ".png")
+    plt.savefig(path)
+    # plt.show(bbox_inches='tight', pad_inches=0)
+    plt.show()
+
+
+def three():
+    path = os.path.join(DATADIR, "three.png")
+    img = cv.cvtColor(cv.imread(path), cv.COLOR_BGR2RGB)
+    img = cv.cvtColor(img, cv.COLOR_RGB2GRAY)
+    plt.figure(figsize=(2, 2))
+
+    plt.imshow(img, cmap='gray', interpolation='nearest')
+    plt.xlim([0, 64])
+    plt.ylim([64, 0])
+    plt.xticks([0, 16, 32, 48, 64])
+    plt.yticks([0, 16, 32, 48, 64])
+
+    # plt.xticks([0, 8, 16, 24, 32, 40, 48, 56, 64])
+    # plt.yticks([0, 8, 16, 24, 32, 40, 48, 56, 64])
+
+    plt.tight_layout()
+    path = os.path.join(DATADIR, "example_plotter_3_" + time_escaped() + ".svg")
+    plt.savefig(path)
+    plt.show(bbox_inches='tight', pad_inches=0)
+    # plt.show()
+
+
+for _ in range(1):
+    three()
