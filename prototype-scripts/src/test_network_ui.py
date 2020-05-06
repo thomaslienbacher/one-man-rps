@@ -21,7 +21,7 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
-DATADIR = "/home/pi/one-man-rps/data/model_backups"
+REPODIR = "/home/pi/one-man-rps/"
 PADDING = 12
 BORDER = 2
 VERTICAL_FLIP = True
@@ -33,10 +33,11 @@ camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=IMG_NET_SIZE)
 time.sleep(0.5)
 
-path = os.path.join(DATADIR, "v7_model_architecture.json")
+model_backups = os.path.join(REPODIR, "data/model_backups")
+path = os.path.join(model_backups, "v7_model_architecture.json")
 with open(path, "r") as f:
     model = model_from_json(f.read())
-path = os.path.join(DATADIR, "v7_model_weights.h5")
+path = os.path.join(model_backups, "v7_model_weights.h5")
 model.load_weights(path)
 print("Loaded model!")
 
@@ -59,23 +60,24 @@ def key_up(e):
 window.bind('<KeyRelease>', key_up)
 
 # pre loaded images
-cv_img = cv.cvtColor(cv.imread("rock.png"), cv.COLOR_BGR2RGB)
+images = os.path.join(REPODIR, "prototype-scripts/src")
+cv_img = cv.cvtColor(cv.imread(os.path.join(images, "rock.png")), cv.COLOR_BGR2RGB)
 cv_img = cv.resize(cv_img, (image_size, image_size))
 photo_rock = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
 
-cv_img = cv.cvtColor(cv.imread("paper.png"), cv.COLOR_BGR2RGB)
+cv_img = cv.cvtColor(cv.imread(os.path.join(images, "paper.png")), cv.COLOR_BGR2RGB)
 cv_img = cv.resize(cv_img, (image_size, image_size))
 photo_paper = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
 
-cv_img = cv.cvtColor(cv.imread("scissors.png"), cv.COLOR_BGR2RGB)
+cv_img = cv.cvtColor(cv.imread(os.path.join(images, "scissors.png")), cv.COLOR_BGR2RGB)
 cv_img = cv.resize(cv_img, (image_size, image_size))
 photo_scissors = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
 
-cv_img = cv.cvtColor(cv.imread("blank.png"), cv.COLOR_BGR2RGB)
+cv_img = cv.cvtColor(cv.imread(os.path.join(images, "blank.png")), cv.COLOR_BGR2RGB)
 cv_img = cv.resize(cv_img, (image_size, image_size))
 photo_empty = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
 
-cv_img = cv.cvtColor(cv.imread("error.png"), cv.COLOR_BGR2RGB)
+cv_img = cv.cvtColor(cv.imread(os.path.join(images, "error.png")), cv.COLOR_BGR2RGB)
 cv_img = cv.resize(cv_img, (image_size, image_size))
 photo_error = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv_img))
 
